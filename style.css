@@ -1,0 +1,92 @@
+:root {
+    /* The size of a block that makes up the world of Mario */
+    --block-size: 16px;
+    /* How far Mario will walk (in blocks) */
+    --steps: 18;
+    /* How long it takes to walk a single block */
+    --step-time: 0.3s;
+    /* How long Mario should wait before starting his walk */
+    --delay: 2s;
+}
+
+body {
+    /* The body should cover the entire viewport */
+    height: 100vh;
+    margin: 0;
+
+    /* Center the world in the viewport */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#world {
+    /* The world is 27x15 blocks in size */
+    width: calc(27 * var(--block-size));
+    height: calc(15 * var(--block-size));
+    background-image: url(images/world.png);
+
+    /* Mario will be positioned relative to the world */
+    position: relative;
+
+    /* Draw the world at 3x scale */
+    transform: scale(3);
+}
+
+#mario {
+    /* Mario is exactly one block in size */
+    width: var(--block-size);
+    height: var(--block-size);
+    background-image: url(images/mario.png);
+    background-position: 0px 0px;
+
+    /* Mario's starting position */
+    position: absolute;
+    left: calc(2 * var(--block-size));
+    bottom: calc(2 * var(--block-size));
+
+    /*
+    Mario has two animations that run concurrently:
+
+    1. Walking:
+
+    mario.png contains 4 frames: one for standing and three for walking. We select a frame to show
+    by animating the background-position. The steps timing function causes the animation to jump
+    (and not slide) between frames, with jump-start skipping the first (standing) frame.
+
+    A single iteration of this animation walks a single block, so we repeat it for the desired
+    amount of steps.
+
+    2. Moving:
+
+    The move animation slides Mario from left to right while the walk animation animates his
+    background-image. The fill mode is set to forwards so Mario will stay at his final location.
+    */
+    animation:
+        walk var(--step-time) steps(3, jump-start) var(--delay) var(--steps),
+        move calc(var(--steps) * var(--step-time)) linear var(--delay) forwards;
+}
+
+/*
+The walk animation updates Mario's background-image to switch between the different frames. This
+works because each frame is exactly the same size (one block), so the animation can use the steps
+timing function to increment the background-position by exactly one frame each time.
+*/
+@keyframes walk {
+    from {
+        background-position: 0px 0px;
+    }
+    to {
+        background-position: calc(3 * var(--block-size)) 0px;
+    }
+}
+
+/* The move animation slides Mario from left to right over the desired distance */
+@keyframes move {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(calc(var(--steps) * var(--block-size)));
+    }
+}
