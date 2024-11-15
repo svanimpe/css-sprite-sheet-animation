@@ -15,7 +15,7 @@ body {
     margin: 0;
 
     /* Center the world in the viewport */
-    display: flex;
+    display: block flex;
     justify-content: center;
     align-items: center;
 }
@@ -29,8 +29,8 @@ body {
     /* Mario will be positioned relative to the world */
     position: relative;
 
-    /* Draw the world at 3x scale */
-    transform: scale(3);
+    /* Draw the world at 2x scale */
+    transform: scale(2);
 }
 
 #mario {
